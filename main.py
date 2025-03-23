@@ -74,7 +74,7 @@ loop.run_until_complete(enviar_mensaje())
 
 print("✅ Predicción enviada a Telegram.")
 
-!pip install python-telegram-bot --upgrade
+
 
 import telegram
 print("La librería telegram se ha importado correctamente.")
@@ -154,7 +154,7 @@ async def main():
 # Iniciar el proceso en el loop de eventos
 asyncio.run(main())
 
-!pip install schedule
+
 
 import asyncio
 import schedule
@@ -242,7 +242,11 @@ import nest_asyncio
 nest_asyncio.apply()
 
 import asyncio
-await procesar_apuestas()
+import asyncio
+
+if __name__ == "__main__":
+    asyncio.run(procesar_apuestas())
+
 
 print(mejores_apuestas)
 
@@ -267,7 +271,7 @@ from telegram import Bot
 nest_asyncio.apply()
 
 # Configuración de Telegram
-TOKEN = "8173186457:AAHtCErhB1pgB0fuwqnNKP9xoTZ69Gqb39Y"
+TOKEN = "7534747872:AAEYVDjR-uCI8ljguPCFnbKFZM4BI9IG0-k"
 CHAT_ID = "2130752167"
 bot = Bot(token=TOKEN)
 
