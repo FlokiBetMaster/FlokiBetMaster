@@ -1,40 +1,27 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
+
+from flask import Flask, request
+from threading import Thread
 import time
-import requests
-from config import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 
-# Configurar opciones de Chrome
-options = Options()
-options.add_argument('--headless')
-options.add_argument('--disable-gpu')
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
+app = Flask(__name__)
 
-service = Service(executable_path='C:/Users/57310/Desktop/chrome_drive/chromedriver.exe')
-driver = webdriver.Chrome(service=service, options=options)
+@app.route('/')
+def home():
+    return "Bot Floki activo 🛡️🔥"
 
-try:
-    # Ir al sitio web
-    driver.get("https://www.flashscore.com/")
+def run():
+    app.run(host='0.0.0.0', port=10000)
 
-    # Esperar un poco para que cargue
-    time.sleep(5)
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
 
-    # Obtener el contenido principal (puedes personalizar esto)
-    contenido = driver.find_element(By.TAG_NAME, "body").text
+def iniciar_bot():
+    print("🔥 FlokiBot iniciando...")
+    while True:
+        print("⚔️ Floki está buscando apuestas con mejor porcentaje...")
+        time.sleep(60)
 
-    # Enviar a Telegram
-    mensaje = f"✅ Scraping completado:\n\n{contenido[:3500]}"  # límite de caracteres
-    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    data = {"chat_id": TELEGRAM_CHAT_ID, "text": mensaje}
-    requests.post(url, data=data)
-
-    print("✅ Scraping finalizado y mensaje enviado a Telegram.")
-except Exception as e:
-    print(f"❌ Error: {e}")
-finally:
-    driver.quit()
-
+if __name__ == "__main__":
+    keep_alive()
+    iniciar_bot()
