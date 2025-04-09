@@ -6,7 +6,7 @@ from datetime import datetime
 from send_telegram import send_message  # Debes tener este módulo ya listo
 
 # Tu API KEY de ODDS API
-API_KEY = "TU_API_KEY_ODDSAPI"
+API_KEY = "a6fdcc949cb6e52a9f9fbbfff6e44b30"
 REGIONS = "sa"  # Sudamérica
 MARKETS = "h2h"
 BOOKMAKERS = "bwin"  # O el que estés usando
