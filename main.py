@@ -29,3 +29,24 @@ def run_bot():
 
 if __name__ == '__main__':
     run_bot()
+import threading
+import time
+import flask
+
+# Inicia el bot en un hilo separado
+def run_bot():
+    # Aquí va tu lógica principal (scraping, análisis, Telegram)
+    start_bot()  # o como se llame tu función principal
+
+bot_thread = threading.Thread(target=run_bot)
+bot_thread.start()
+
+# Crea un servidor Flask mínimo para que Render detecte un puerto
+app = flask.Flask(__name__)
+
+@app.route('/')
+def home():
+    return "FlokiBetMaster is running."
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
