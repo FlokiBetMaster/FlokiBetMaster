@@ -1,52 +1,29 @@
-import requests
-import time
+# main.py
 
-# --- CONFIGURACIÓN TELEGRAM ---
-TOKEN = '7673667307:AAHxupSKq1xC-QP2Pl6q_wQEXSJMzwuefCU'
-CHAT_ID = '2130752167'
-API_URL = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
-
-# --- MENSAJE DE TESTEO ---
-def enviar_mensaje(mensaje):
-    try:
-        payload = {
-            'chat_id': CHAT_ID,
-            'text': mensaje
-        }
-        response = requests.post(API_URL, data=payload)
-        if response.status_code != 200:
-            print('Error al enviar mensaje:', response.text)
-    except Exception as e:
-        print('Error:', str(e))
-
-# --- LOOP PRINCIPAL ---
-def run_bot():
-    enviar_mensaje("⚡ FlokiBot está en línea, listo para vikingear ⚔️")
-    while True:
-        # Aquí irán las predicciones y el stake automático más adelante
-        enviar_mensaje("Ejemplo de alerta automática 🧠 Probabilidad: 87% - Stake: 2.5%")
-        time.sleep(3600)  # Envía 1 vez por hora (modificable)
-
-if __name__ == '__main__':
-    run_bot()
+from flask import Flask
 import threading
 import time
-import flask
+from your_bot_module import start_bot  # Asegúrate de importar tu lógica aquí
 
-# Inicia el bot en un hilo separado
-def run_bot():
-    # Aquí va tu lógica principal (scraping, análisis, Telegram)
-    start_bot()  # o como se llame tu función principal
-
-bot_thread = threading.Thread(target=run_bot)
-bot_thread.start()
-
-# Crea un servidor Flask mínimo para que Render detecte un puerto
-app = flask.Flask(__name__)
+# Crea el servidor Flask mínimo para mantener el servicio vivo
+app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "FlokiBetMaster is running."
+    return "FlokiBetMaster is running and scraping Copa Libertadores + Sudamericana!"
+
+# Ejecuta el bot en un hilo paralelo
+def run_bot():
+    print("[🧠 FlokiBot] Iniciando scraping y análisis de partidos...")
+    start_bot()  # Aquí va tu lógica principal
+
+# Inicia el hilo del bot
+threading.Thread(target=run_bot).start()
+
+# Ejecuta Flask para que Render detecte el puerto
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
