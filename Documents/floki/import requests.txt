@@ -1,0 +1,34 @@
+import requests
+import time
+import random
+
+# Configuración de Telegram
+TOKEN = "7673667307:AAHxupSKq1xC-QP2Pl6q_wQEXSJMzwuefCU"
+CHAT_ID = "2130752167"
+TELEGRAM_API_URL = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+
+def enviar_alerta(mensaje):
+    try:
+        data = {
+            "chat_id": CHAT_ID,
+            "text": mensaje,
+            "parse_mode": "Markdown"
+        }
+        response = requests.post(TELEGRAM_API_URL, data=data)
+        print(f"Mensaje enviado: {mensaje}")
+    except Exception as e:
+        print(f"Error al enviar mensaje: {e}")
+
+# Simulación de alertas en tiempo real (puedes reemplazarlo por tu sistema de predicción)
+def monitorear_apuestas():
+    while True:
+        # Simulación: genera una predicción aleatoria
+        probabilidad = random.randint(80, 99)
+        mensaje = f"🔥 *APUESTA RECOMENDADA*\n\n✅ Probabilidad: *{probabilidad}%*\n💰 Stake: *Automático*\n🏆 ¡Ejecuta ya!"
+        enviar_alerta(mensaje)
+
+        # Espera antes de revisar la siguiente
+        time.sleep(3600)  # Cada 1 hora (ajustable)
+
+if __name__ == "__main__":
+    monitorear_apuestas()

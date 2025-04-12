@@ -1,0 +1,117 @@
+{
+  "name": "FlokiApuestasValor",
+  "nodes": [
+    {
+      "id": "webhook_entrada",
+      "parameters": {
+        "path": "apuesta",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "responseData": {
+          "responseBody": "✅ Webhook recibido correctamente"
+        }
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 200]
+    },
+    {
+      "id": "telegram_mensaje",
+      "parameters": {
+        "chatId": "2130752167",
+        "text": "📊 *Nueva Apuesta de Valor:*\n\n🏆 *{{$json.competition}}*\n🆚 {{$json.teams}}\n📈 Probabilidad: *{{$json.odds}}%*\n💰 Stake sugerido: *{{$json.stake}}*\n\n✅ ¿Deseas apostar?",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "name": "Enviar mensaje a Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "credentials": {
+        "telegramApi": {
+          "id": "1",
+          "name": "BotFlokiTelegram"
+        }
+      },
+      "position": [500, 200]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje a Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false
+}
+import json
+
+# Definir el flujo de trabajo n8n como un diccionario Python
+workflow = {
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "apuesta",
+                "responseMode": "onReceived",
+                "responseData": "firstEntryJson",
+                "options": {}
+            },
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [100, 300]
+        },
+        {
+            "parameters": {
+                "chatId": "2130752167",
+                "text": (
+                    "📊 *Nueva Apuesta de Valor:*\n\n"
+                    "🏆 *{{$json.competition}}*\n"
+                    "🆚 {{$json.teams}}\n"
+                    "📈 Probabilidad: *{{$json.odds}}%*\n"
+                    "💰 Stake sugerido: *{{$json.stake}}*\n\n"
+                    "✅ ¿Deseas apostar?"
+                ),
+                "additionalFields": {
+                    "parse_mode": "Markdown"
+                }
+            },
+            "name": "Enviar mensaje a Telegram",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1,
+            "position": [380, 300],
+            "credentials": {
+                "telegramApi": {
+                    "id": "1",
+                    "name": "BotFlokiTelegram"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [[{"node": "Enviar mensaje a Telegram", "type": "main", "index": 0}]]
+        }
+    },
+    "active": True,
+    "settings": {},
+    "name": "Floki Apuestas de Valor",
+    "tags": [],
+    "versionId": "v1"
+}
+
+# Guardar el flujo en un archivo .json
+ruta_archivo = "/mnt/data/FlokiApuestasValor.json"
+with open(ruta_archivo, "w", encoding="utf-8") as f:
+    json.dump(workflow, f, ensure_ascii=False, indent=2)
+
+ruta_archivo
