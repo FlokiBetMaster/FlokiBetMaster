@@ -1,21 +1,20 @@
+from fetch_odds import fetch_odds
+from predict import get_best_bet_per_match
+from stake_manager import calculate_stake, update_bank
+from telegram import send_telegram_message
 
-from flask import Flask, jsonify
+def main():
+    print("📡 [ Cargando partidos en vivo...]")
+    events = fetch_odds()
+    print(f"✅ [ Partidos encontrados: {len(events)} ]")
+    best_bets = get_best_bet_per_match(events)
+    bank = 100000
 
-app = Flask(__name__)
-
-@app.route("/")
-def home():
-    return "Bot Floki activo 🛡️🔥"
-
-@app.route("/prediccion")
-def prediccion():
-    # Simulación de una predicción de apuesta
-    return jsonify({
-        "partido": "Flamengo vs Palmeiras",
-        "apuesta": "Más de 2.5 goles",
-        "probabilidad": "82%",
-        "stake": 2
-    })
+    for bet in best_bets:
+        bet["stake"] = calculate_stake(bet["odds"], bank)
+        bank = update_bank(bank, bet["stake"])["new_bank"]
+        print(f"📢 Apuesta: {bet}")
+        send_telegram_message(bet)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    main()

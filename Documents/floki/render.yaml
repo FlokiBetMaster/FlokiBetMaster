@@ -1,9 +1,7 @@
-
 services:
-  - type: web
-    name: flokibetmaster
+  - type: cron
+    name: floki-cron
     env: python
-    plan: free
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python main.py"
-    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    schedule: "*/30 * * * *"  # cada 30 minutos
