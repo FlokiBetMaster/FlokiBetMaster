@@ -1,0 +1,1 @@
+keyboard = [[InlineKeyboardButton("Apostar en Bwin", url=get_bwin_url(pred["match"]))]]
